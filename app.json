@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "",
-    "slug": "",
+    "name": "Bar Salesiano",
+    "slug": "bar-salesiano",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "",
+    "scheme": "barsalesiano",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
@@ -28,7 +28,7 @@
         {
           "image": "./assets/images/splash-icon.png",
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#FDE047"
         }
       ]
     ],
