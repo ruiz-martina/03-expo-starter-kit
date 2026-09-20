@@ -7,15 +7,13 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 
 export default function TunnelScreen() {
-  // TODO [RETO 03 - PASO 1]: Declara el estado booleano 'tunelActivo' inicializado en false usando useState(false)
-  // const [tunelActivo, setTunelActivo] = useState(false);
+  // [RETO 03 - PASO 1]: Declara el estado booleano 'tunelActivo' inicializado en false
+  const [tunelActivo, setTunelActivo] = useState(false);
 
-  // TODO [RETO 03 - PASO 2]: Programa la función toggleTunel para alternar entre true y false
+  // [RETO 03 - PASO 2]: Programa la función toggleTunel para alternar el valor con !tunelActivo
   const toggleTunel = () => {
-    // TODO: Alternar el estado tunelActivo llamando a setTunelActivo(!tunelActivo)
+    setTunelActivo(!tunelActivo);
   };
-
-  const tunelActivo = false; // TODO: Conectar con tu estado reactivo useState
 
   return (
     <SafeAreaView className="flex-1 bg-[#FFFDF9]" edges={['top', 'left', 'right']}>
