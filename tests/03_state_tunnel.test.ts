@@ -22,19 +22,38 @@ assert(fs.existsSync(tunnelPath), "El archivo app/(tabs)/tunnel.tsx existe");
 
 const content = fs.readFileSync(tunnelPath, "utf-8");
 
-assert(content.includes("useState"), "Importa y utiliza el hook 'useState'", "Usa const [tunelActivo, setTunelActivo] = useState(false);");
+// Eliminar comentarios para no evaluar código comentado
+const cleanCode = content.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*/g, '');
+
+const getFunctionBody = (code: string, fnName: string) => {
+  const match = code.match(new RegExp(`const\\s+${fnName}\\s*=\\s*\\([^)]*\\)\\s*=>\\s*\\{([\\s\\S]*?)\\};?`));
+  return match ? match[1] : '';
+};
+
+assert(cleanCode.includes("useState"), "Importa y utiliza el hook 'useState'", "Usa const [tunelActivo, setTunelActivo] = useState(false);");
+
 assert(
-  /const\s*\[\s*tunelActivo\s*,\s*setTunelActivo\s*\]\s*=\s*useState/.test(content),
-  "Declara el estado reactivo [tunelActivo, setTunelActivo]",
-  "Declara: const [tunelActivo, setTunelActivo] = useState(false);"
+  /const\s*\[\s*tunelActivo\s*,\s*setTunelActivo\s*\]\s*=\s*useState/.test(cleanCode),
+  "Declara el estado reactivo [tunelActivo, setTunelActivo] activo (no comentado)",
+  "Descomenta o escribe: const [tunelActivo, setTunelActivo] = useState(false);"
 );
+
 assert(
-  content.includes("toggleTunel") || content.includes("setTunelActivo(!tunelActivo)"),
-  "Contiene función para alternar el estado del túnel",
-  "Implementa la función toggleTunel para cambiar el estado"
+  !/const\s+tunelActivo\s*=\s*(false|true)\s*;/.test(cleanCode),
+  "Elimina la constante estática 'const tunelActivo = false;'",
+  "Borra la línea 'const tunelActivo = false;' para que la app use el estado reactivo useState"
 );
+
+const toggleBody = getFunctionBody(cleanCode, 'toggleTunel');
 assert(
-  content.includes("tunelActivo ?") || content.includes("if (tunelActivo)"),
+  toggleBody.includes("setTunelActivo") &&
+  (toggleBody.includes("!tunelActivo") || toggleBody.includes("!prev")),
+  "Implementa la función toggleTunel para alternar el estado con setTunelActivo",
+  "Dentro de toggleTunel usa: setTunelActivo(!tunelActivo) o setTunelActivo(prev => !prev);"
+);
+
+assert(
+  cleanCode.includes("tunelActivo ?") || cleanCode.includes("if (tunelActivo)"),
   "Renderiza condicionalmente el estado del túnel en la UI",
   "Usa el operador ternario tunelActivo ? ... : ... en el Card o Button"
 );
